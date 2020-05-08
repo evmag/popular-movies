@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding">8dp</dimen>
+    <dimen name="progress_bar_dimen">48dp</dimen>
+
+    <dimen name="thumbnail_width">185dp</dimen>
+    <dimen name="thumbnail_height">286dp</dimen>
+
+    <dimen name="text_size_large">22sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
+    <dimen name="text_size_small">16sp</dimen>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/thumbnail_width"
+    android:layout_height="@dimen/thumbnail_height"
+    android:layout_gravity="center">
+
+    <ImageView
+        android:id="@+id/iv_movie_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/movie_thumbnail" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="@dimen/thumbnail_width"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_medium"
+        android:padding="@dimen/padding"
+        android:textColor="@android:color/primary_text_dark"
+        android:visibility="invisible"/>
+
+</FrameLayout>
