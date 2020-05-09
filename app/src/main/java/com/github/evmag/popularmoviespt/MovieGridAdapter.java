@@ -75,7 +75,7 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.MyVi
     }
 
     public interface MovieGridAdapterOnClickHandler {
-        void onClick(int position);
+        void onClick(int movieId);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -91,7 +91,8 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.MyVi
 
         @Override
         public void onClick(View v) {
-            mOnClickHandler.onClick(getAdapterPosition());
+            Movie movie = mMovies.get(getAdapterPosition());
+            mOnClickHandler.onClick(movie.getMovieId());
         }
     }
 }

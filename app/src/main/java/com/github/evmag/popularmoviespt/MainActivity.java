@@ -65,9 +65,10 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
 
     // Handle RecyclerView clicks, starts a DetailActivity providing the clicked position
     @Override
-    public void onClick(int position) {
+    public void onClick(int movieId) {
         Intent intentToMovieDetailActivity = new Intent(this, MovieDetail.class);
-        intentToMovieDetailActivity.putExtra(Intent.EXTRA_TEXT, position);
+        intentToMovieDetailActivity.putExtra(MovieDetail.EXTRA_MOVIE_ID, movieId);
+        intentToMovieDetailActivity.putExtra(MovieDetail.EXTRA_DATABASE_SOURCE_NAME, getDatabaseName());
         startActivity(intentToMovieDetailActivity);
     }
 
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
             case R.id.action_sort_by_rating:
                 mMainViewModel.setMainActivityState(MainViewModel.MainActivityState.TOP_RATED);
                 mSortByPopularity = false;
+                setupViewModel(MoviesDatabase.TOP_RATED_MOVIES_DB_NAME);
                 loadOnlineData();
                 return true;
             case R.id.action_sort_by_popularity:
@@ -162,6 +164,19 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
         mErrorDisplayTextView.setVisibility(View.VISIBLE);
     }
 
+    private String getDatabaseName() {
+        switch (mMainViewModel.getMainActivityState()) {
+            case TOP_RATED:
+                return MoviesDatabase.TOP_RATED_MOVIES_DB_NAME;
+            case MOST_POPULAR:
+                return MoviesDatabase.POPULAR_MOVIES_DB_NAME;
+            case FAVORITES:
+                return MoviesDatabase.FAVORITE_MOVIES_DB_NAME;
+            default:
+                return "";
+        }
+    }
+
     // Async task for downloading the movie data from the API end point
     class FetchMovieData extends AsyncTask<Void, Void, String> {
 
@@ -188,11 +203,10 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
                     displayErrorNetwork();
                 } else {
                     MovieDataSource.getInstance().setMovies(movies); // TODO: Remove
-                    String databaseName = mSortByPopularity ? MoviesDatabase.POPULAR_MOVIES_DB_NAME : MoviesDatabase.TOP_RATED_MOVIES_DB_NAME;
 
                     // TODO: move this to another thread
                     MoviesDatabase moviesDatabase =
-                            MoviesDatabase.getInstance(MainActivity.this, databaseName);
+                            MoviesDatabase.getInstance(MainActivity.this, getDatabaseName());
                     moviesDatabase.moviesDao().deleteAllMovies();
                     moviesDatabase.moviesDao().insertAllMovies(movies);
                 }

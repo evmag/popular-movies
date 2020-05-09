@@ -2,6 +2,7 @@ package com.github.evmag.popularmoviespt.viewmodels;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -15,7 +16,7 @@ public class MainViewModel extends AndroidViewModel {
     private MainActivityState mMainActivityState;
 
 
-    public MainViewModel(Application application) {
+    public MainViewModel(@NonNull Application application) {
         super(application);
         mMainActivityState = MainActivityState.TOP_RATED;
     }
