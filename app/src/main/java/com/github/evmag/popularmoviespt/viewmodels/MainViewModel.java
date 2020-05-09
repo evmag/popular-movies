@@ -12,10 +12,12 @@ import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
     private LiveData<List<Movie>> mMovies;
+    private MainActivityState mMainActivityState;
 
 
     public MainViewModel(Application application) {
         super(application);
+        mMainActivityState = MainActivityState.TOP_RATED;
     }
 
     public void setDatabaseSource(String databaseName) {
@@ -24,5 +26,20 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Movie>> getMovies() {
-        return mMovies; }
+        return mMovies;
+    }
+
+    public MainActivityState getMainActivityState() {
+        return mMainActivityState;
+    }
+
+    public void setMainActivityState(MainActivityState mainActivityState) {
+        mMainActivityState = mainActivityState;
+    }
+
+    public enum MainActivityState {
+        TOP_RATED,
+        MOST_POPULAR,
+        FAVORITES
+    }
 }

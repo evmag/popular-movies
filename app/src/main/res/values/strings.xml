@@ -13,5 +13,6 @@
     <string name="menu_sort_by_rating">Sort by rating</string>
     <string name="menu_sort_by_popularity">Sort by popularity</string>
     <string name="menu_refresh">Refresh</string>
+    <string name="menu_favorite_movies">Favorite Movies</string>
 
 </resources>

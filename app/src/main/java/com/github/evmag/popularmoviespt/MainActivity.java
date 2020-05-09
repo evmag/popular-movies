@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
     private boolean mSortByPopularity;
     private ProgressBar mLoadingProgressBar;
     private TextView mErrorDisplayTextView;
+    private MainViewModel mMainViewModel;
 
 
     @Override
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
         mMovieGrid.setAdapter(mMovieGridAdapter);
 
         setupViewModel(MoviesDatabase.TOP_RATED_MOVIES_DB_NAME);
-        refresh();
+        loadOnlineData();
     }
 
     // Handle RecyclerView clicks, starts a DetailActivity providing the clicked position
@@ -78,10 +79,15 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (mSortByPopularity) {
-            menu.findItem(R.id.action_sort_by_popularity).setChecked(true);
-        } else {
-            menu.findItem(R.id.action_sort_by_rating).setChecked(true);
+        switch (mMainViewModel.getMainActivityState()) {
+            case TOP_RATED:
+                menu.findItem(R.id.action_sort_by_rating).setChecked(true);
+                break;
+            case MOST_POPULAR:
+                menu.findItem(R.id.action_sort_by_popularity).setChecked(true);
+                break;
+            case FAVORITES:
+                menu.findItem(R.id.action_favorite_movies).setChecked(true);
         }
         return true;
     }
@@ -90,16 +96,22 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sort_by_rating:
+                mMainViewModel.setMainActivityState(MainViewModel.MainActivityState.TOP_RATED);
                 mSortByPopularity = false;
-                refresh();
+                loadOnlineData();
                 return true;
             case R.id.action_sort_by_popularity:
+                mMainViewModel.setMainActivityState(MainViewModel.MainActivityState.MOST_POPULAR);
                 mSortByPopularity = true;
                 setupViewModel(MoviesDatabase.POPULAR_MOVIES_DB_NAME);
-                refresh();
+                loadOnlineData();
+                return true;
+            case R.id.action_favorite_movies:
+                mMainViewModel.setMainActivityState(MainViewModel.MainActivityState.FAVORITES);
+                setupViewModel(MoviesDatabase.FAVORITE_MOVIES_DB_NAME);
                 return true;
             case R.id.action_refresh:
-                refresh();
+                loadOnlineData();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -108,12 +120,12 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
     }
 
     private void setupViewModel(String databaseName) {
-        MainViewModel mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        if (mainViewModel.getMovies() != null && mainViewModel.getMovies().hasObservers()) {
-            mainViewModel.getMovies().removeObservers(this);
+        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        if (mMainViewModel.getMovies() != null && mMainViewModel.getMovies().hasObservers()) {
+            mMainViewModel.getMovies().removeObservers(this);
         }
-        mainViewModel.setDatabaseSource(databaseName);
-        mainViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
+        mMainViewModel.setDatabaseSource(databaseName);
+        mMainViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
                 mMovieGrid.setVisibility(View.VISIBLE);
@@ -125,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
     }
 
     // Initiated the loading of data
-    private void refresh() {
+    private void loadOnlineData() {
         mMovieGrid.setVisibility(View.INVISIBLE);
         mLoadingProgressBar.setVisibility(View.VISIBLE);
         mErrorDisplayTextView.setVisibility(View.INVISIBLE);
@@ -185,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
                 } else {
                     MovieDataSource.getInstance().setMovies(movies); // TODO: Remove
                     String databaseName = mSortByPopularity ? MoviesDatabase.POPULAR_MOVIES_DB_NAME : MoviesDatabase.TOP_RATED_MOVIES_DB_NAME;
+
                     MoviesDatabase moviesDatabase =
                             MoviesDatabase.getInstance(MainActivity.this, databaseName);
                     moviesDatabase.moviesDao().deleteAllMovies();
