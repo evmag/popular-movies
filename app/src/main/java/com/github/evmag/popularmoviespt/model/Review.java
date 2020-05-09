@@ -1,21 +1,23 @@
 package com.github.evmag.popularmoviespt.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(foreignKeys = @ForeignKey(entity = Movie.class,
-        parentColumns = "movie_id",
-        childColumns = "review_id",
-        onDelete = ForeignKey.CASCADE))
+//@Entity(foreignKeys = @ForeignKey(entity = Movie.class,
+//        parentColumns = "movie_id",
+//        childColumns = "review_id",
+//        onDelete = ForeignKey.CASCADE))
 public class Review {
-    @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "review_id")
+//    @PrimaryKey(autoGenerate = false)
+//    @ColumnInfo(name = "review_id")
+//    @NonNull
     private String mId;
-    @ColumnInfo(name = "author")
+//    @ColumnInfo(name = "author")
     private String mAuthor;
-    @ColumnInfo(name = "content")
+//    @ColumnInfo(name = "content")
     private String mContent;
 
     public Review(String id, String author, String content) {

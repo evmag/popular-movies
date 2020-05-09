@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.evmag.popularmoviespt.model.Movie;
 import com.github.evmag.popularmoviespt.model.MovieDataSource;
+import com.github.evmag.popularmoviespt.model.MoviesDao;
+import com.github.evmag.popularmoviespt.model.MoviesDatabase;
 import com.github.evmag.popularmoviespt.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
@@ -18,9 +20,11 @@ import com.squareup.picasso.Picasso;
 public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.MyViewHolder> {
 
     private final MovieGridAdapterOnClickHandler mOnClickHandler;
+    private final MoviesDao mMoviesDao;
 
-    public MovieGridAdapter(MovieGridAdapterOnClickHandler onClickHandler) {
+    public MovieGridAdapter(MovieGridAdapterOnClickHandler onClickHandler, MoviesDao moviesDao) {
         mOnClickHandler = onClickHandler;
+        mMoviesDao = moviesDao;
     }
 
     @NonNull
@@ -33,7 +37,8 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Movie movie = MovieDataSource.getInstance().getMovie(position);
+//        Movie movie = MovieDataSource.getInstance().getMovie(position);
+        Movie movie = mMoviesDao.getMovies().get(position); // TODO: Refactor
 
         holder.mTextView.setText(movie.getOriginalTitle());
 
@@ -62,7 +67,8 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return MovieDataSource.getInstance().getMovieCount();
+        return mMoviesDao.getMovieCount();
+//        return MovieDataSource.getInstance().getMovieCount();
     }
 
     public interface MovieGridAdapterOnClickHandler {

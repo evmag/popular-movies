@@ -49,7 +49,10 @@ public class MovieDataJsonParser {
                     releaseDate = releaseDate.substring(0, 4);
                 }
 
+                int movieId = movieJsonObject.getInt("id"); // TODO: Refactor
+
                 Movie movie = new Movie(originalTitle, posterPath, plotSynopsis, userRating, releaseDate);
+                movie.setMovieId(movieId);
                 movies.add(movie);
             }
         } catch (JSONException e) {

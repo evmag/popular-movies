@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.github.evmag.popularmoviespt.model.Movie;
 import com.github.evmag.popularmoviespt.model.MovieDataSource;
+import com.github.evmag.popularmoviespt.model.MoviesDao;
+import com.github.evmag.popularmoviespt.model.MoviesDatabase;
 import com.github.evmag.popularmoviespt.utilities.MovieDataJsonParser;
 import com.github.evmag.popularmoviespt.utilities.NetworkUtils;
 
@@ -108,7 +110,8 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
         mErrorDisplayTextView.setVisibility(View.INVISIBLE);
 
         // Setup the RecyclerView
-        mMovieGridAdapter = new MovieGridAdapter(this);
+        MoviesDao moviesDao = MoviesDatabase.getInstance(this, MoviesDatabase.TOP_RATED_MOVIES_DB_NAME).moviesDao();
+        mMovieGridAdapter = new MovieGridAdapter(this, moviesDao);
 
         int screenWidthDp = getResources().getConfiguration().screenWidthDp;
         int maxGridColumns = screenWidthDp / THUMBNAIL_WIDTH;
@@ -151,7 +154,13 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
                 if (movies == null) {
                     displayErrorNetwork();
                 } else {
-                    MovieDataSource.getInstance().setMovies(movies);
+                    MovieDataSource.getInstance().setMovies(movies); // TODO: Remove
+                    // TODO: Select correct db name according to sorting selection
+                    MoviesDatabase moviesDatabase =
+                            MoviesDatabase.getInstance(MainActivity.this, MoviesDatabase.TOP_RATED_MOVIES_DB_NAME);
+                    moviesDatabase.moviesDao().deleteAllMovies();
+                    moviesDatabase.moviesDao().insertAllMovies(movies);
+
                     displayLoadedResults();
                 }
             }

@@ -5,11 +5,14 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Database(entities = {Movie.class, Trailer.class, Review.class}, version = 1, exportSchema = false)
+@Database(entities = {Movie.class}, version = 1, exportSchema = false)
+@TypeConverters(ListStringConverter.class)
 public abstract class MoviesDatabase extends RoomDatabase {
     public static final String POPULAR_MOVIES_DB_NAME = "popular_movies";
     public static final String TOP_RATED_MOVIES_DB_NAME = "top_rated_movies";
@@ -30,6 +33,7 @@ public abstract class MoviesDatabase extends RoomDatabase {
                 moviesDatabase = Room.databaseBuilder(context.getApplicationContext(),
                         MoviesDatabase.class,
                         dbName)
+                        .allowMainThreadQueries() // TODO: Move database queries to a different thread and remove this
                         .build();
                 sMoviesDBs.put(dbName, moviesDatabase);
             }
