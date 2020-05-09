@@ -1,11 +1,16 @@
 package com.github.evmag.popularmoviespt.model;
 
+import java.util.List;
+
 public class Movie {
+    private int mMovieId;
     private String mOriginalTitle;
     private String mPosterPath;
     private String mPlotSynopsis;
     private double mUserRating;
     private String mReleaseDate;
+    private List<Trailer> mTrailers;
+    private List<Review> mReviews;
 
     // == Constructors ===
 
