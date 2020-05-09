@@ -53,6 +53,7 @@ public class MovieDataJsonParser {
 
                 Movie movie = new Movie(originalTitle, posterPath, plotSynopsis, userRating, releaseDate);
                 movie.setMovieId(movieId);
+                movie.setSortOrder(i);
                 movies.add(movie);
             }
         } catch (JSONException e) {

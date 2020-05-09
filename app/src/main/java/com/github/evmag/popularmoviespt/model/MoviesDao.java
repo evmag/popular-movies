@@ -10,7 +10,7 @@ import java.util.List;
 
 @Dao
 public interface MoviesDao {
-    @Query("SELECT * FROM movies")
+    @Query("SELECT * FROM movies ORDER BY sort_order ASC")
     LiveData<List<Movie>> getMovies();
 
     @Query("SELECT * FROM movies WHERE movie_id = :movieId")
