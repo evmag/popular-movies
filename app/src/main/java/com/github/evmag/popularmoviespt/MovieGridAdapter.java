@@ -16,15 +16,16 @@ import com.github.evmag.popularmoviespt.model.MoviesDatabase;
 import com.github.evmag.popularmoviespt.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 // RecyclerView adapter for providing movie_grid_item objects to the RecyclerView
 public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.MyViewHolder> {
 
     private final MovieGridAdapterOnClickHandler mOnClickHandler;
-    private final MoviesDao mMoviesDao;
+    private List<Movie> mMovies;
 
-    public MovieGridAdapter(MovieGridAdapterOnClickHandler onClickHandler, MoviesDao moviesDao) {
+    public MovieGridAdapter(MovieGridAdapterOnClickHandler onClickHandler) {
         mOnClickHandler = onClickHandler;
-        mMoviesDao = moviesDao;
     }
 
     @NonNull
@@ -37,8 +38,7 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-//        Movie movie = MovieDataSource.getInstance().getMovie(position);
-        Movie movie = mMoviesDao.getMovies().get(position); // TODO: Refactor
+        Movie movie = mMovies.get(position);
 
         holder.mTextView.setText(movie.getOriginalTitle());
 
@@ -62,13 +62,16 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.MyVi
             holder.mTextView.setVisibility(View.VISIBLE);
         }
 
-
     }
 
     @Override
     public int getItemCount() {
-        return mMoviesDao.getMovieCount();
-//        return MovieDataSource.getInstance().getMovieCount();
+        return (mMovies == null) ? 0 : mMovies.size();
+    }
+
+    public void setMovies(List<Movie> movies) {
+        mMovies = movies;
+        notifyDataSetChanged();
     }
 
     public interface MovieGridAdapterOnClickHandler {

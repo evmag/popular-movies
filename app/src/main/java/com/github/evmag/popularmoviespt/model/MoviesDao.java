@@ -1,5 +1,6 @@
 package com.github.evmag.popularmoviespt.model;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -10,7 +11,7 @@ import java.util.List;
 @Dao
 public interface MoviesDao {
     @Query("SELECT * FROM movies")
-    List<Movie> getMovies();
+    LiveData<List<Movie>> getMovies();
 
     @Query("SELECT * FROM movies WHERE movie_id = :movieId")
     Movie getMovieById(int movieId);

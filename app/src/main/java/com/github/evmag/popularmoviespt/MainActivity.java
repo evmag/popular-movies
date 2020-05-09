@@ -2,6 +2,9 @@ package com.github.evmag.popularmoviespt;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +23,7 @@ import com.github.evmag.popularmoviespt.model.MoviesDao;
 import com.github.evmag.popularmoviespt.model.MoviesDatabase;
 import com.github.evmag.popularmoviespt.utilities.MovieDataJsonParser;
 import com.github.evmag.popularmoviespt.utilities.NetworkUtils;
+import com.github.evmag.popularmoviespt.viewmodels.MainViewModel;
 
 import java.io.IOException;
 import java.net.URL;
@@ -47,6 +51,16 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
 
         mSortByPopularity = false;
 
+        // Setup the RecyclerView
+        mMovieGridAdapter = new MovieGridAdapter(this);
+
+        int screenWidthDp = getResources().getConfiguration().screenWidthDp;
+        int maxGridColumns = screenWidthDp / THUMBNAIL_WIDTH;
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, maxGridColumns);
+        mMovieGrid.setLayoutManager(layoutManager);
+        mMovieGrid.setAdapter(mMovieGridAdapter);
+
+        setupViewModel();
         refresh();
     }
 
@@ -94,6 +108,20 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
 
     }
 
+    private void setupViewModel() {
+        MainViewModel mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
+        mainViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
+                mMovieGrid.setVisibility(View.VISIBLE);
+                mLoadingProgressBar.setVisibility(View.INVISIBLE);
+                mErrorDisplayTextView.setVisibility(View.INVISIBLE);
+                mMovieGridAdapter.setMovies(movies);
+            }
+        });
+    }
+
     // Initiated the loading of data
     private void refresh() {
         mMovieGrid.setVisibility(View.INVISIBLE);
@@ -110,8 +138,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
         mErrorDisplayTextView.setVisibility(View.INVISIBLE);
 
         // Setup the RecyclerView
-        MoviesDao moviesDao = MoviesDatabase.getInstance(this, MoviesDatabase.TOP_RATED_MOVIES_DB_NAME).moviesDao();
-        mMovieGridAdapter = new MovieGridAdapter(this, moviesDao);
+        mMovieGridAdapter = new MovieGridAdapter(this);
 
         int screenWidthDp = getResources().getConfiguration().screenWidthDp;
         int maxGridColumns = screenWidthDp / THUMBNAIL_WIDTH;
@@ -161,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
                     moviesDatabase.moviesDao().deleteAllMovies();
                     moviesDatabase.moviesDao().insertAllMovies(movies);
 
-                    displayLoadedResults();
+//                    displayLoadedResults();
                 }
             }
         }
