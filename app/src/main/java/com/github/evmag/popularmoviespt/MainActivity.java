@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
         setContentView(R.layout.activity_main);
 
         mMovieGrid = findViewById(R.id.rv_movie_grid);
-        mLoadingProgressBar = (ProgressBar) findViewById(R.id.pb_loading);
-        mErrorDisplayTextView = (TextView) findViewById(R.id.tv_error_display);
+        mLoadingProgressBar = findViewById(R.id.pb_loading);
+        mErrorDisplayTextView = findViewById(R.id.tv_error_display);
 
         mSortByPopularity = false;
 
@@ -120,11 +120,20 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
     }
 
     private void setupViewModel(String databaseName) {
-        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        // Initialize view model
+        if (mMainViewModel == null) {
+            mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        }
+
+        // Remove observers from current movies list if there are any
         if (mMainViewModel.getMovies() != null && mMainViewModel.getMovies().hasObservers()) {
             mMainViewModel.getMovies().removeObservers(this);
         }
-        mMainViewModel.setDatabaseSource(databaseName);
+
+        // Set the database source
+        mMainViewModel.setDatabaseSource();
+
+        // Add observer to update the recyclerview adapter
         mMainViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
@@ -145,29 +154,12 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
         new FetchMovieData().execute();
     }
 
-    // Displays the data, called after the data have been downloaded from the API end point
-    private void displayLoadedResults() {
-        mMovieGrid.setVisibility(View.VISIBLE);
-        mLoadingProgressBar.setVisibility(View.INVISIBLE);
-        mErrorDisplayTextView.setVisibility(View.INVISIBLE);
-
-        // Setup the RecyclerView
-        mMovieGridAdapter = new MovieGridAdapter(this);
-
-        int screenWidthDp = getResources().getConfiguration().screenWidthDp;
-        int maxGridColumns = screenWidthDp / THUMBNAIL_WIDTH;
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, maxGridColumns);
-        mMovieGrid.setLayoutManager(layoutManager);
-        mMovieGrid.setAdapter(mMovieGridAdapter);
-
-    }
 
     // Display error message
     private void displayErrorNetwork() {
         mMovieGrid.setVisibility(View.INVISIBLE);
         mLoadingProgressBar.setVisibility(View.INVISIBLE);
         mErrorDisplayTextView.setVisibility(View.VISIBLE);
-
     }
 
     // Async task for downloading the movie data from the API end point
@@ -198,12 +190,11 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
                     MovieDataSource.getInstance().setMovies(movies); // TODO: Remove
                     String databaseName = mSortByPopularity ? MoviesDatabase.POPULAR_MOVIES_DB_NAME : MoviesDatabase.TOP_RATED_MOVIES_DB_NAME;
 
+                    // TODO: move this to another thread
                     MoviesDatabase moviesDatabase =
                             MoviesDatabase.getInstance(MainActivity.this, databaseName);
                     moviesDatabase.moviesDao().deleteAllMovies();
                     moviesDatabase.moviesDao().insertAllMovies(movies);
-
-//                    displayLoadedResults();
                 }
             }
         }

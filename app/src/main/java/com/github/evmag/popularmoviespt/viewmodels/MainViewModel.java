@@ -20,7 +20,21 @@ public class MainViewModel extends AndroidViewModel {
         mMainActivityState = MainActivityState.TOP_RATED;
     }
 
-    public void setDatabaseSource(String databaseName) {
+    public void setDatabaseSource() {
+        String databaseName = "";
+
+        switch (mMainActivityState) {
+            case TOP_RATED:
+                databaseName = MoviesDatabase.TOP_RATED_MOVIES_DB_NAME;
+                break;
+            case MOST_POPULAR:
+                databaseName = MoviesDatabase.POPULAR_MOVIES_DB_NAME;
+                break;
+            case FAVORITES:
+                databaseName = MoviesDatabase.FAVORITE_MOVIES_DB_NAME;
+                break;
+        }
+
         MoviesDatabase moviesDatabase = MoviesDatabase.getInstance(this.getApplication(), databaseName);
         mMovies = moviesDatabase.moviesDao().getMovies();
     }
