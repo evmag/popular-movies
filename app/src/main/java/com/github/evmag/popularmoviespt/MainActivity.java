@@ -3,7 +3,6 @@ package com.github.evmag.popularmoviespt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 
 import com.github.evmag.popularmoviespt.model.Movie;
 import com.github.evmag.popularmoviespt.model.MovieDataSource;
-import com.github.evmag.popularmoviespt.model.MoviesDao;
 import com.github.evmag.popularmoviespt.model.MoviesDatabase;
 import com.github.evmag.popularmoviespt.utilities.MovieDataJsonParser;
 import com.github.evmag.popularmoviespt.utilities.NetworkUtils;
@@ -60,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
         mMovieGrid.setLayoutManager(layoutManager);
         mMovieGrid.setAdapter(mMovieGridAdapter);
 
-        setupViewModel();
+        setupViewModel(MoviesDatabase.TOP_RATED_MOVIES_DB_NAME);
         refresh();
     }
 
@@ -97,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
                 return true;
             case R.id.action_sort_by_popularity:
                 mSortByPopularity = true;
+                setupViewModel(MoviesDatabase.POPULAR_MOVIES_DB_NAME);
                 refresh();
                 return true;
             case R.id.action_refresh:
@@ -108,9 +107,12 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
 
     }
 
-    private void setupViewModel() {
+    private void setupViewModel(String databaseName) {
         MainViewModel mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-
+        if (mainViewModel.getMovies() != null && mainViewModel.getMovies().hasObservers()) {
+            mainViewModel.getMovies().removeObservers(this);
+        }
+        mainViewModel.setDatabaseSource(databaseName);
         mainViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
@@ -182,9 +184,9 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
                     displayErrorNetwork();
                 } else {
                     MovieDataSource.getInstance().setMovies(movies); // TODO: Remove
-                    // TODO: Select correct db name according to sorting selection
+                    String databaseName = mSortByPopularity ? MoviesDatabase.POPULAR_MOVIES_DB_NAME : MoviesDatabase.TOP_RATED_MOVIES_DB_NAME;
                     MoviesDatabase moviesDatabase =
-                            MoviesDatabase.getInstance(MainActivity.this, MoviesDatabase.TOP_RATED_MOVIES_DB_NAME);
+                            MoviesDatabase.getInstance(MainActivity.this, databaseName);
                     moviesDatabase.moviesDao().deleteAllMovies();
                     moviesDatabase.moviesDao().insertAllMovies(movies);
 

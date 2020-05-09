@@ -16,8 +16,10 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(Application application) {
         super(application);
+    }
 
-        MoviesDatabase moviesDatabase = MoviesDatabase.getInstance(this.getApplication(), MoviesDatabase.TOP_RATED_MOVIES_DB_NAME);
+    public void setDatabaseSource(String databaseName) {
+        MoviesDatabase moviesDatabase = MoviesDatabase.getInstance(this.getApplication(), databaseName);
         mMovies = moviesDatabase.moviesDao().getMovies();
     }
 
