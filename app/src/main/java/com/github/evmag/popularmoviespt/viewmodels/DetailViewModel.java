@@ -12,6 +12,8 @@ import com.github.evmag.popularmoviespt.model.MoviesDatabase;
 public class DetailViewModel extends AndroidViewModel {
     private LiveData<Movie> mMovie;
     private LiveData<Movie> mMovieFromFavorites;
+
+    private String mSourceDatabaseName;
     private boolean mIsMovieFavorite;
 
     public DetailViewModel(@NonNull Application application) {
@@ -19,6 +21,7 @@ public class DetailViewModel extends AndroidViewModel {
     }
 
     public void setUp(int movieId, String sourceDatabaseName) {
+        mSourceDatabaseName = sourceDatabaseName;
         if (sourceDatabaseName.equals(MoviesDatabase.FAVORITE_MOVIES_DB_NAME)) {
             // TODO: Handle this case
         } else {
@@ -44,5 +47,9 @@ public class DetailViewModel extends AndroidViewModel {
 
     public void setMovieFavorite(boolean movieFavorite) {
         mIsMovieFavorite = movieFavorite;
+    }
+
+    public String getSourceDatabaseName() {
+        return mSourceDatabaseName;
     }
 }

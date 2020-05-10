@@ -25,6 +25,6 @@ public class ListStringConverter {
         if (string == null || string.isEmpty()) {
             return null;
         }
-        return Arrays.asList(string.split("\\s*|\\s*"));
+        return Arrays.asList(string.split("\\s*\\|\\s*"));
     }
 }

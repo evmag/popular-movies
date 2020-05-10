@@ -63,4 +63,60 @@ public class MovieDataJsonParser {
 
         return movies;
     }
+
+    public static List<String> parseMovieTrailersJson(String movieTrailersJson) {
+        List<String> trailers = new ArrayList<>();
+
+        try {
+            JSONObject trailersResults = new JSONObject(movieTrailersJson);
+            JSONArray videos = trailersResults.getJSONArray(RESULTS);
+
+            for (int i = 0; i < videos.length(); i++) {
+                JSONObject video = videos.getJSONObject(i);
+
+                String videoType = video.getString("type");
+
+                if (videoType != null && videoType.equals("Trailer")) {
+                    String site = video.getString("site");
+                    String key = video.getString("key");
+
+                    trailers.add(NetworkUtils.buildVideoURL(site, key).toString());
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return trailers;
+    }
+
+    public static List<List<String>> parseMovieReviewsJson(String movieReviewsJson) {
+        List<String> authors = new ArrayList<>();
+        List<String> contents = new ArrayList<>();
+
+        try {
+            JSONObject reviewsResults = new JSONObject(movieReviewsJson);
+            JSONArray reviews = reviewsResults.getJSONArray(RESULTS);
+
+            for (int i = 0; i < reviews.length(); i++) {
+                JSONObject review = reviews.getJSONObject(i);
+
+                String author = review.getString("author");
+                String content = review.getString("content");
+
+                authors.add(author);
+                contents.add(content);
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        List<List<String>> results = new ArrayList<>();
+        results.add(authors);
+        results.add(contents);
+
+        return results;
+    }
 }
