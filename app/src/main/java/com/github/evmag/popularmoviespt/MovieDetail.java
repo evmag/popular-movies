@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -25,7 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-public class MovieDetail extends AppCompatActivity {
+public class MovieDetail extends AppCompatActivity implements TrailersAdapter.TrailersAdapterOnClickHandler {
     public static final String EXTRA_MOVIE_ID = "movie_id";
     public static final String EXTRA_DATABASE_SOURCE_NAME = "database_name";
 
@@ -64,7 +66,7 @@ public class MovieDetail extends AppCompatActivity {
             @Override
             public void onChanged(Movie movie) {
                 if (movie != null) {
-                    if (movie.getTrailerUrls() == null || movie.getReviewContents() == null) {
+                    if (movie.getTrailerKeys() == null || movie.getReviewContents() == null) {
                         new FetchMovieTrailersAndReviews().execute(movie.getMovieId());
                     }
                     populateFields();
@@ -82,7 +84,7 @@ public class MovieDetail extends AppCompatActivity {
 
     private void setupRecyclerViewsAdapters() {
         RecyclerView trailersRecyclerView = findViewById(R.id.rv_trailers);
-        mTrailersAdapter = new TrailersAdapter();
+        mTrailersAdapter = new TrailersAdapter(this);
         trailersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         trailersRecyclerView.setAdapter(mTrailersAdapter);
 
@@ -90,6 +92,17 @@ public class MovieDetail extends AppCompatActivity {
         mReviewsAdapter = new ReviewsAdapter();
         reviewsRecyclerView.setLayoutManager(new LinearLayoutManager((this)));
         reviewsRecyclerView.setAdapter(mReviewsAdapter);
+    }
+
+    @Override
+    public void onClickTrailer(String videoKey) {
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoKey));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + videoKey));
+        try {
+            startActivity(appIntent);
+        } catch (ActivityNotFoundException ex) {
+            startActivity(webIntent);
+        }
     }
 
     // Populates the activity views with the selected movie values
@@ -124,7 +137,7 @@ public class MovieDetail extends AppCompatActivity {
                     .into(moviePosterImageView);
         }
 
-        mTrailersAdapter.setTrailerUrls(movie.getTrailerUrls());
+        mTrailersAdapter.setData(movie.getTrailerKeys(), movie.getTrailerNames());
         mReviewsAdapter.setData(movie.getReviewAuthors(), movie.getReviewContents());
     }
 
@@ -152,15 +165,17 @@ public class MovieDetail extends AppCompatActivity {
             if (s == null) {
 //                displayErrorNetwork();
             } else {
-                List<String> trailerURLs = MovieDataJsonParser.parseMovieTrailersJson(s[0]);
+                List<List<String>> trailers = MovieDataJsonParser.parseMovieTrailersJson(s[0]);
                 List<List<String>> reviews = MovieDataJsonParser.parseMovieReviewsJson(s[1]);
 
-                if (trailerURLs == null && reviews == null) {
+                if (trailers == null && reviews == null) {
 //                    displayErrorNetwork();
                 } else {
                     Movie movie = mDetailViewModel.getMovie().getValue();
 
-                    movie.setTrailerUrls(trailerURLs);
+                    movie.setTrailerKeys(trailers.get(0));
+                    movie.setTrailerNames(trailers.get(1));
+
                     movie.setReviewAuthors(reviews.get(0));
                     movie.setReviewContents(reviews.get(1));
 

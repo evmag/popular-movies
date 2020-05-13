@@ -13,7 +13,13 @@ import com.github.evmag.popularmoviespt.R;
 import java.util.List;
 
 public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.TrailersViewHolder> {
-    private List<String> mTrailerUrls;
+    private List<String> mTrailerKeys;
+    private List<String> mTrailerNames;
+    private TrailersAdapterOnClickHandler mOnClickHandler;
+
+    public TrailersAdapter(TrailersAdapterOnClickHandler onClickHandler) {
+        mOnClickHandler = onClickHandler;
+    }
 
     @NonNull
     @Override
@@ -25,26 +31,36 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     @Override
     public void onBindViewHolder(@NonNull TrailersViewHolder holder, int position) {
-        int trailerNumber = position + 1;
-        holder.mTrailerName.setText("Trailer " + trailerNumber);
+        holder.mTrailerName.setText(mTrailerNames.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return (mTrailerUrls == null) ? 0 : mTrailerUrls.size();
+        return (mTrailerKeys == null) ? 0 : mTrailerKeys.size();
     }
 
-    public void setTrailerUrls(List<String> trailerUrls) {
-        mTrailerUrls = trailerUrls;
+    public void setData(List<String> trailerKeys, List<String> trailerNames) {
+        mTrailerKeys = trailerKeys;
+        mTrailerNames = trailerNames;
         notifyDataSetChanged();
     }
 
-    class TrailersViewHolder extends RecyclerView.ViewHolder {
+    public interface TrailersAdapterOnClickHandler {
+        void onClickTrailer(String videoURL);
+    }
+
+    class TrailersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView mTrailerName;
 
         public TrailersViewHolder(@NonNull View itemView) {
             super(itemView);
             mTrailerName = itemView.findViewById(R.id.tv_trailer);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mOnClickHandler.onClickTrailer(mTrailerKeys.get(getAdapterPosition()));
         }
     }
 }

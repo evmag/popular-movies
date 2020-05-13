@@ -27,8 +27,10 @@ public class Movie {
     private double mUserRating;
     @ColumnInfo(name = "release_date")
     private String mReleaseDate;
-    @ColumnInfo(name = "trailer_urls")
-    private List<String> mTrailerUrls;
+    @ColumnInfo(name = "trailer_keys")
+    private List<String> mTrailerKeys;
+    @ColumnInfo(name = "trailer_names")
+    private List<String> mTrailerNames;
     @ColumnInfo(name = "review_authors")
     private List<String> mReviewAuthors;
     @ColumnInfo(name = "review_contents")
@@ -47,7 +49,7 @@ public class Movie {
 
     public Movie(int movieId, int sortOrder, String originalTitle, String posterPath,
                  String plotSynopsis, double userRating, String releaseDate,
-                 List<String> trailerUrls, List<String> reviewAuthors, List<String> reviewContents) {
+                 List<String> trailerKeys, List<String> trailerNames, List<String> reviewAuthors, List<String> reviewContents) {
         mMovieId = movieId;
         mSortOrder = sortOrder;
         mOriginalTitle = originalTitle;
@@ -55,7 +57,8 @@ public class Movie {
         mPlotSynopsis = plotSynopsis;
         mUserRating = userRating;
         mReleaseDate = releaseDate;
-        mTrailerUrls = trailerUrls;
+        mTrailerKeys = trailerKeys;
+        mTrailerNames = trailerNames;
         mReviewAuthors = reviewAuthors;
         mReviewContents = reviewContents;
     }
@@ -118,12 +121,12 @@ public class Movie {
         mSortOrder = sortOrder;
     }
 
-    public List<String> getTrailerUrls() {
-        return mTrailerUrls;
+    public List<String> getTrailerKeys() {
+        return mTrailerKeys;
     }
 
-    public void setTrailerUrls(List<String> trailerUrls) {
-        mTrailerUrls = trailerUrls;
+    public void setTrailerKeys(List<String> trailerKeys) {
+        mTrailerKeys = trailerKeys;
     }
 
     public List<String> getReviewAuthors() {
@@ -140,5 +143,13 @@ public class Movie {
 
     public void setReviewContents(List<String> reviewContents) {
         mReviewContents = reviewContents;
+    }
+
+    public List<String> getTrailerNames() {
+        return mTrailerNames;
+    }
+
+    public void setTrailerNames(List<String> trailerNames) {
+        mTrailerNames = trailerNames;
     }
 }

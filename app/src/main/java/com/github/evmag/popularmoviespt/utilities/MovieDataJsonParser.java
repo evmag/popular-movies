@@ -64,8 +64,9 @@ public class MovieDataJsonParser {
         return movies;
     }
 
-    public static List<String> parseMovieTrailersJson(String movieTrailersJson) {
-        List<String> trailers = new ArrayList<>();
+    public static List<List<String>> parseMovieTrailersJson(String movieTrailersJson) {
+        List<String> trailerKeys = new ArrayList<>();
+        List<String> trailerNames = new ArrayList<>();
 
         try {
             JSONObject trailersResults = new JSONObject(movieTrailersJson);
@@ -76,11 +77,15 @@ public class MovieDataJsonParser {
 
                 String videoType = video.getString("type");
 
-                if (videoType != null && videoType.equals("Trailer")) {
+                if (videoType != null && videoType.toLowerCase().equals("trailer")) {
                     String site = video.getString("site");
-                    String key = video.getString("key");
+                    if (site.toLowerCase().equals("youtube")) {
+                        String key = video.getString("key");
+                        String name = video.getString("name");
 
-                    trailers.add(NetworkUtils.buildVideoURL(site, key).toString());
+                        trailerKeys.add(key);
+                        trailerNames.add(name);
+                    }
                 }
             }
         } catch (JSONException e) {
@@ -88,7 +93,11 @@ public class MovieDataJsonParser {
             return null;
         }
 
-        return trailers;
+        List<List<String>> results = new ArrayList<>();
+        results.add(trailerKeys);
+        results.add(trailerNames);
+
+        return results;
     }
 
     public static List<List<String>> parseMovieReviewsJson(String movieReviewsJson) {
