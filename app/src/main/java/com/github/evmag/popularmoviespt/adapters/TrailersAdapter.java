@@ -13,7 +13,7 @@ import com.github.evmag.popularmoviespt.R;
 import java.util.List;
 
 public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.TrailersViewHolder> {
-    private List<String> mTrailers;
+    private List<String> mTrailerUrls;
 
     @NonNull
     @Override
@@ -25,13 +25,18 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     @Override
     public void onBindViewHolder(@NonNull TrailersViewHolder holder, int position) {
-        holder.mTrailerName.setText("Trailer " + position);
-
+        int trailerNumber = position + 1;
+        holder.mTrailerName.setText("Trailer " + trailerNumber);
     }
 
     @Override
     public int getItemCount() {
-        return (mTrailers == null) ? 0 : mTrailers.size();
+        return (mTrailerUrls == null) ? 0 : mTrailerUrls.size();
+    }
+
+    public void setTrailerUrls(List<String> trailerUrls) {
+        mTrailerUrls = trailerUrls;
+        notifyDataSetChanged();
     }
 
     class TrailersViewHolder extends RecyclerView.ViewHolder {

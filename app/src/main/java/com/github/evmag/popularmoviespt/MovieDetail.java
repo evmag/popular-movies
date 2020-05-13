@@ -3,6 +3,8 @@ package com.github.evmag.popularmoviespt;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,8 +12,8 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.evmag.popularmoviespt.adapters.TrailersAdapter;
 import com.github.evmag.popularmoviespt.model.Movie;
-import com.github.evmag.popularmoviespt.model.MovieDataSource;
 import com.github.evmag.popularmoviespt.model.MoviesDatabase;
 import com.github.evmag.popularmoviespt.utilities.MovieDataJsonParser;
 import com.github.evmag.popularmoviespt.utilities.NetworkUtils;
@@ -27,6 +29,7 @@ public class MovieDetail extends AppCompatActivity {
     public static final String EXTRA_DATABASE_SOURCE_NAME = "database_name";
 
     private DetailViewModel mDetailViewModel;
+    private TrailersAdapter mTrailersAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class MovieDetail extends AppCompatActivity {
                 mDetailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
                 mDetailViewModel.setUp(movieId, databaseName);
                 setupViewModelObservers();
+                setupRecyclerViewsAdapters();
             }
 //            mMovie = MovieDataSource.getInstance().getMovie(posClicked);
 //            populateFields();
@@ -72,6 +76,13 @@ public class MovieDetail extends AppCompatActivity {
                 mDetailViewModel.setMovieFavorite(movie != null);
             }
         });
+    }
+
+    private void setupRecyclerViewsAdapters() {
+        mTrailersAdapter = new TrailersAdapter();
+        RecyclerView trailersRecyclerView = findViewById(R.id.rv_trailers);
+        trailersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        trailersRecyclerView.setAdapter(mTrailersAdapter);
     }
 
     // Populates the activity views with the selected movie values
@@ -105,6 +116,8 @@ public class MovieDetail extends AppCompatActivity {
                     .error(R.drawable.thumbnail_error)
                     .into(moviePosterImageView);
         }
+
+        mTrailersAdapter.setTrailerUrls(movie.getTrailerUrls());
     }
 
     class FetchMovieTrailersAndReviews extends AsyncTask<Integer, Void, String[]> {

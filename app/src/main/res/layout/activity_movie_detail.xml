@@ -126,7 +126,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider_trailers" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_trailes"
+                android:id="@+id/rv_trailers"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_plot_synopsis"
@@ -138,7 +138,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintTop_toBottomOf="@+id/rv_trailes"
+                app:layout_constraintTop_toBottomOf="@+id/rv_trailers"
                 android:layout_marginTop="8dp"/>
 
             <TextView
