@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.evmag.popularmoviespt.adapters.ReviewsAdapter;
 import com.github.evmag.popularmoviespt.adapters.TrailersAdapter;
 import com.github.evmag.popularmoviespt.model.Movie;
 import com.github.evmag.popularmoviespt.model.MoviesDatabase;
@@ -30,6 +31,7 @@ public class MovieDetail extends AppCompatActivity {
 
     private DetailViewModel mDetailViewModel;
     private TrailersAdapter mTrailersAdapter;
+    private ReviewsAdapter mReviewsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +81,15 @@ public class MovieDetail extends AppCompatActivity {
     }
 
     private void setupRecyclerViewsAdapters() {
-        mTrailersAdapter = new TrailersAdapter();
         RecyclerView trailersRecyclerView = findViewById(R.id.rv_trailers);
+        mTrailersAdapter = new TrailersAdapter();
         trailersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         trailersRecyclerView.setAdapter(mTrailersAdapter);
+
+        RecyclerView reviewsRecyclerView = findViewById(R.id.rv_reviews);
+        mReviewsAdapter = new ReviewsAdapter();
+        reviewsRecyclerView.setLayoutManager(new LinearLayoutManager((this)));
+        reviewsRecyclerView.setAdapter(mReviewsAdapter);
     }
 
     // Populates the activity views with the selected movie values
@@ -118,6 +125,7 @@ public class MovieDetail extends AppCompatActivity {
         }
 
         mTrailersAdapter.setTrailerUrls(movie.getTrailerUrls());
+        mReviewsAdapter.setData(movie.getReviewAuthors(), movie.getReviewContents());
     }
 
     class FetchMovieTrailersAndReviews extends AsyncTask<Integer, Void, String[]> {
