@@ -28,6 +28,10 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
     public void onBindViewHolder(@NonNull ReviewsViewHolder holder, int position) {
         holder.mAuthor.setText(mAuthors.get(position));
         holder.mContent.setText(mContents.get(position));
+
+        if (position == 0) {
+            holder.mDivider.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -44,11 +48,13 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
     class ReviewsViewHolder extends RecyclerView.ViewHolder {
         TextView mAuthor;
         TextView mContent;
+        View mDivider;
 
         public ReviewsViewHolder(@NonNull View itemView) {
             super(itemView);
             mAuthor = itemView.findViewById(R.id.tv_author);
             mContent = itemView.findViewById(R.id.tv_content);
+            mDivider = itemView.findViewById(R.id.divider_review_item);
         }
     }
 }

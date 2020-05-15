@@ -8,4 +8,35 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ListItem">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="ListItem.TrailerTitle" parent="ListItem">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+
+    <style name="ListItem.ReviewAuthor" parent="ListItem">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="ListItem.ReviewContent" parent="ListItem">
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+
+    <style name="MovieDetailText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+    <style name="MovieDetailText.Label" parent="MovieDetailText">
+        <item name="android:textStyle">bold</item>
+
+    </style>
+    <style name="MovieDetailText.Content" parent="MovieDetailText"></style>
+
 </resources>

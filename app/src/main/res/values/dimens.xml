@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="padding">8dp</dimen>
+    <dimen name="top_margins">8dp</dimen>
     <dimen name="progress_bar_dimen">48dp</dimen>
 
     <dimen name="thumbnail_width">185dp</dimen>

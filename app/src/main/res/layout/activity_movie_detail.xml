@@ -33,9 +33,6 @@
                 android:id="@+id/iv_movie_poster"
                 android:layout_width="@dimen/thumbnail_width"
                 android:layout_height="@dimen/thumbnail_height"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
                 android:contentDescription="@string/movie_thumbnail"
                 android:padding="@dimen/padding"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,13 +41,8 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
+                style="@style/MovieDetailText.Label"
                 android:text="@string/user_rating"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_movie_poster"
                 app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"
                 app:layout_constraintTop_toTopOf="@+id/iv_movie_poster"
@@ -58,33 +50,22 @@
 
             <TextView
                 android:id="@+id/tv_user_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:textSize="@dimen/text_size_medium"
+                style="@style/MovieDetailText.Content"
                 app:layout_constraintStart_toEndOf="@+id/textView"
                 app:layout_constraintTop_toTopOf="@+id/textView"
                 tools:text="7.50" />
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                style="@style/MovieDetailText.Label"
+                android:layout_marginTop="@dimen/top_margins"
                 android:text="@string/release_year"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <TextView
                 android:id="@+id/tv_release_year"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:textSize="@dimen/text_size_medium"
+                style="@style/MovieDetailText.Content"
                 app:layout_constraintStart_toEndOf="@+id/textView2"
                 app:layout_constraintTop_toTopOf="@id/textView2"
                 tools:text="2020" />
@@ -95,17 +76,23 @@
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintTop_toBottomOf="@+id/iv_movie_poster"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="@dimen/top_margins"/>
+
+            <TextView
+                android:id="@+id/textView5"
+                style="@style/MovieDetailText.Label"
+                android:layout_marginTop="@dimen/top_margins"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider"
+                android:text="@string/synopsis"/>
 
             <TextView
                 android:id="@+id/tv_plot_synopsis"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:padding="@dimen/padding"
-                android:textSize="@dimen/text_size_small"
-                app:layout_constraintStart_toStartOf="@+id/iv_movie_poster"
-                app:layout_constraintTop_toBottomOf="@+id/divider"
+                style="@style/MovieDetailText.Content"
+                android:layout_marginTop="@dimen/top_margins"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
                 tools:text="Synopsis" />
 
             <View
@@ -114,15 +101,15 @@
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintTop_toBottomOf="@+id/tv_plot_synopsis"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="@dimen/top_margins"/>
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Trailers"
-                app:layout_constraintStart_toStartOf="@+id/tv_plot_synopsis"
+                style="@style/MovieDetailText.Label"
+                android:layout_marginTop="@dimen/top_margins"
+                android:text="@string/trailers"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_trailers" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -131,7 +118,7 @@
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_plot_synopsis"
                 app:layout_constraintTop_toBottomOf="@+id/textView3"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="@dimen/top_margins"/>
 
             <View
                 android:id="@+id/divider_reviews"
@@ -139,15 +126,15 @@
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintTop_toBottomOf="@+id/rv_trailers"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="@dimen/top_margins"/>
 
             <TextView
                 android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Reviews"
-                app:layout_constraintStart_toStartOf="@+id/tv_plot_synopsis"
+                style="@style/MovieDetailText.Label"
+                android:layout_marginTop="@dimen/top_margins"
+                android:text="@string/reviews"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_reviews" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -168,7 +155,8 @@
                 app:layout_constraintEnd_toEndOf="@+id/tv_release_year"
                 app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
-                app:srcCompat="@android:drawable/star_big_off" />
+                app:srcCompat="@android:drawable/star_big_off"
+                android:contentDescription="@string/toggle_favorite_movie"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

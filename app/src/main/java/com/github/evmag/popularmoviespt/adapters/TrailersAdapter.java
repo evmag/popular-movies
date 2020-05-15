@@ -32,6 +32,9 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
     @Override
     public void onBindViewHolder(@NonNull TrailersViewHolder holder, int position) {
         holder.mTrailerName.setText(mTrailerNames.get(position));
+        if (position == 0) {
+            holder.mDivider.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -51,10 +54,12 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     class TrailersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView mTrailerName;
+        View mDivider;
 
         public TrailersViewHolder(@NonNull View itemView) {
             super(itemView);
             mTrailerName = itemView.findViewById(R.id.tv_trailer);
+            mDivider = itemView.findViewById(R.id.divider_trailer_item);
             itemView.setOnClickListener(this);
         }
 
