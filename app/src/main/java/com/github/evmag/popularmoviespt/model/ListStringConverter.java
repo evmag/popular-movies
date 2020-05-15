@@ -5,6 +5,11 @@ import androidx.room.TypeConverter;
 import java.util.Arrays;
 import java.util.List;
 
+/*
+ * Type converter class.
+ * Converts between a List<String> and a String with values separated by "|"
+ *
+ */
 public class ListStringConverter {
     @TypeConverter
     public String listStringToString(List<String> list) {

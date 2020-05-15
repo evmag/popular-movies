@@ -8,13 +8,12 @@ import androidx.room.PrimaryKey;
 
 import java.util.List;
 
+// Movie entity
 @Entity(tableName = "movies")
 public class Movie {
     @PrimaryKey
-    @NonNull
     @ColumnInfo(name = "movie_id")
     private int mMovieId;
-    @NonNull
     @ColumnInfo(name = "sort_order")
     private int mSortOrder;
     @ColumnInfo(name = "original_title")

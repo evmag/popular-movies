@@ -32,6 +32,4 @@ public interface MoviesDao {
     @Query("DELETE FROM movies")
     void deleteAllMovies();
 
-    @Query("SELECT COUNT(*) FROM movies")
-    int getMovieCount();
 }
