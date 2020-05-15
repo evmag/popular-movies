@@ -3,7 +3,6 @@ package com.github.evmag.popularmoviespt.viewmodels;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -24,22 +23,13 @@ public class DetailViewModel extends AndroidViewModel {
     }
 
     public void setUp(int movieId, String sourceDatabaseName) {
-
         MoviesDatabase moviesFavoriteDatabase = MoviesDatabase.getInstance(this.getApplication(), MoviesDatabase.FAVORITE_MOVIES_DB_NAME);
         mMovieFromFavorites = moviesFavoriteDatabase.moviesDao().getMovieById(movieId);
 
-
         mSourceDatabaseName = sourceDatabaseName;
-//        if (sourceDatabaseName.equals(MoviesDatabase.FAVORITE_MOVIES_DB_NAME)) {
-//            // TODO: Handle this case
-//
-//
-//        } else {
-            MoviesDatabase moviesSourceDatabase = MoviesDatabase.getInstance(this.getApplication(), sourceDatabaseName);
-            mMovie = moviesSourceDatabase.moviesDao().getMovieById(movieId);
-//        }
 
-
+        MoviesDatabase moviesSourceDatabase = MoviesDatabase.getInstance(this.getApplication(), sourceDatabaseName);
+        mMovie = moviesSourceDatabase.moviesDao().getMovieById(movieId);
     }
 
     public LiveData<Movie> getMovie() {

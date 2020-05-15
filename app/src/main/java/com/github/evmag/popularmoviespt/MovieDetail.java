@@ -52,16 +52,13 @@ public class MovieDetail extends AppCompatActivity implements TrailersAdapter.Tr
             String databaseName = intent.getStringExtra(EXTRA_DATABASE_SOURCE_NAME);
 
             if (movieId == -1 || databaseName == null) {
-                // TODO: error
+                // Display an error message - Not implemented
             } else {
-                // TODO: populate view model
                 mDetailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
                 mDetailViewModel.setUp(movieId, databaseName);
                 setupViewModelObservers();
                 setupRecyclerViewsAdapters();
             }
-//            mMovie = MovieDataSource.getInstance().getMovie(posClicked);
-//            populateFields();
         }
     }
 
@@ -210,13 +207,13 @@ public class MovieDetail extends AppCompatActivity implements TrailersAdapter.Tr
         protected void onPostExecute(String[] s) {
             super.onPostExecute(s);
             if (s == null) {
-//                displayErrorNetwork();
+//                displayErrorNetwork(); - Not Implemented
             } else {
                 List<List<String>> trailers = MovieDataJsonParser.parseMovieTrailersJson(s[0]);
                 List<List<String>> reviews = MovieDataJsonParser.parseMovieReviewsJson(s[1]);
 
                 if (trailers == null && reviews == null) {
-//                    displayErrorNetwork();
+//                    displayErrorNetwork(); - Not Implemented
                 } else {
                     final Movie movie = mDetailViewModel.getMovie().getValue();
 

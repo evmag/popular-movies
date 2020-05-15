@@ -51,23 +51,6 @@ public class NetworkUtils {
         return appendAPIKey(baseUrl);
     }
 
-    public static URL buildVideoURL(String site, String key) {
-        URL url = null;
-
-        try {
-            switch (site.toLowerCase()) {
-                case "youtube":
-                    url = new URL("https://www.youtube.com/watch?v=" + key);
-                    break;
-                case "vimeo":
-                    url = new URL("https://www.vimeo.com/" + key);
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return url;
-    }
-
     private static URL appendAPIKey(String baseUrl) {
         Uri buildUri = Uri.parse(baseUrl).buildUpon()
                 .appendQueryParameter(API_KEY_PARAM, API_KEY_VALUE)
