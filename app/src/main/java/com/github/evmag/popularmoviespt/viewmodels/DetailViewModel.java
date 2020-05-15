@@ -31,6 +31,8 @@ public class DetailViewModel extends AndroidViewModel {
 
         MoviesDatabase moviesFavoriteDatabase = MoviesDatabase.getInstance(this.getApplication(), MoviesDatabase.FAVORITE_MOVIES_DB_NAME);
         mMovieFromFavorites = moviesFavoriteDatabase.moviesDao().getMovieById(movieId);
+
+        mIsMovieFavorite = mMovieFromFavorites != null;
     }
 
     public LiveData<Movie> getMovie() {

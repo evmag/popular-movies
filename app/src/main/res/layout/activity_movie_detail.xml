@@ -158,15 +158,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView4"
                 android:layout_marginTop="8dp"/>
 
-            <ToggleButton
-                android:id="@+id/tb_favorite"
+
+            <ImageButton
+                android:id="@+id/ib_favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ToggleButton"
+                android:onClick="toggleFavorite"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_movie_poster"
                 app:layout_constraintEnd_toEndOf="@+id/tv_release_year"
                 app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                app:srcCompat="@android:drawable/star_big_off" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

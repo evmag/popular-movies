@@ -11,12 +11,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.evmag.popularmoviespt.adapters.ReviewsAdapter;
 import com.github.evmag.popularmoviespt.adapters.TrailersAdapter;
 import com.github.evmag.popularmoviespt.model.Movie;
+import com.github.evmag.popularmoviespt.model.MoviesDao;
 import com.github.evmag.popularmoviespt.model.MoviesDatabase;
 import com.github.evmag.popularmoviespt.utilities.MovieDataJsonParser;
 import com.github.evmag.popularmoviespt.utilities.NetworkUtils;
@@ -105,6 +108,19 @@ public class MovieDetail extends AppCompatActivity implements TrailersAdapter.Tr
         }
     }
 
+    public void toggleFavorite(View view) {
+        MoviesDao favoritesDao = MoviesDatabase.getInstance(this, MoviesDatabase.FAVORITE_MOVIES_DB_NAME).moviesDao();
+        Movie movie = mDetailViewModel.getMovie().getValue();
+        if (mDetailViewModel.isMovieFavorite()) {
+            favoritesDao.deleteMovie(movie);
+            mDetailViewModel.setMovieFavorite(false);
+        } else {
+            favoritesDao.insertMovie(movie);
+            mDetailViewModel.setMovieFavorite(true);
+        }
+        setupFavoriteButton();
+    }
+
     // Populates the activity views with the selected movie values
     private void populateFields() {
         TextView originalTitleTextView = findViewById(R.id.tv_original_title);
@@ -139,6 +155,18 @@ public class MovieDetail extends AppCompatActivity implements TrailersAdapter.Tr
 
         mTrailersAdapter.setData(movie.getTrailerKeys(), movie.getTrailerNames());
         mReviewsAdapter.setData(movie.getReviewAuthors(), movie.getReviewContents());
+
+        setupFavoriteButton();
+
+    }
+
+    private void setupFavoriteButton() {
+        ImageButton favoriteImageButton = findViewById(R.id.ib_favorite);
+        if (mDetailViewModel.isMovieFavorite()) {
+            favoriteImageButton.setImageResource(android.R.drawable.star_big_on);
+        } else {
+            favoriteImageButton.setImageResource(android.R.drawable.star_big_off);
+        }
     }
 
     class FetchMovieTrailersAndReviews extends AsyncTask<Integer, Void, String[]> {
