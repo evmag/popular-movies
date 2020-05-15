@@ -3,6 +3,7 @@ package com.github.evmag.popularmoviespt.viewmodels;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -13,6 +14,8 @@ public class DetailViewModel extends AndroidViewModel {
     private LiveData<Movie> mMovie;
     private LiveData<Movie> mMovieFromFavorites;
 
+    private Movie mBackupFavoriteMovie;
+
     private String mSourceDatabaseName;
     private boolean mIsMovieFavorite;
 
@@ -21,18 +24,22 @@ public class DetailViewModel extends AndroidViewModel {
     }
 
     public void setUp(int movieId, String sourceDatabaseName) {
-        mSourceDatabaseName = sourceDatabaseName;
-        if (sourceDatabaseName.equals(MoviesDatabase.FAVORITE_MOVIES_DB_NAME)) {
-            // TODO: Handle this case
-        } else {
-            MoviesDatabase moviesSourceDatabase = MoviesDatabase.getInstance(this.getApplication(), sourceDatabaseName);
-            mMovie = moviesSourceDatabase.moviesDao().getMovieById(movieId);
-        }
 
         MoviesDatabase moviesFavoriteDatabase = MoviesDatabase.getInstance(this.getApplication(), MoviesDatabase.FAVORITE_MOVIES_DB_NAME);
         mMovieFromFavorites = moviesFavoriteDatabase.moviesDao().getMovieById(movieId);
 
-        mIsMovieFavorite = mMovieFromFavorites != null;
+
+        mSourceDatabaseName = sourceDatabaseName;
+//        if (sourceDatabaseName.equals(MoviesDatabase.FAVORITE_MOVIES_DB_NAME)) {
+//            // TODO: Handle this case
+//
+//
+//        } else {
+            MoviesDatabase moviesSourceDatabase = MoviesDatabase.getInstance(this.getApplication(), sourceDatabaseName);
+            mMovie = moviesSourceDatabase.moviesDao().getMovieById(movieId);
+//        }
+
+
     }
 
     public LiveData<Movie> getMovie() {
@@ -53,5 +60,13 @@ public class DetailViewModel extends AndroidViewModel {
 
     public String getSourceDatabaseName() {
         return mSourceDatabaseName;
+    }
+
+    public void setBackupFavoriteMovie(Movie movie) {
+        mBackupFavoriteMovie = movie;
+    }
+
+    public Movie getBackupFavoriteMovie() {
+        return mBackupFavoriteMovie;
     }
 }

@@ -111,7 +111,11 @@ public class MovieDetail extends AppCompatActivity implements TrailersAdapter.Tr
     public void toggleFavorite(View view) {
         MoviesDao favoritesDao = MoviesDatabase.getInstance(this, MoviesDatabase.FAVORITE_MOVIES_DB_NAME).moviesDao();
         Movie movie = mDetailViewModel.getMovie().getValue();
+        if (movie == null) {
+            movie = mDetailViewModel.getBackupFavoriteMovie();
+        }
         if (mDetailViewModel.isMovieFavorite()) {
+            mDetailViewModel.setBackupFavoriteMovie(movie);
             favoritesDao.deleteMovie(movie);
             mDetailViewModel.setMovieFavorite(false);
         } else {
