@@ -38,7 +38,8 @@ public class Movie {
     // == Constructors ===
 
     @Ignore
-    public Movie(String originalTitle, String posterPath, String plotSynopsis, double userRating, String releaseDate) {
+    public Movie(int movieId,String originalTitle, String posterPath, String plotSynopsis, double userRating, String releaseDate) {
+        mMovieId = movieId;
         mOriginalTitle = originalTitle;
         mPosterPath = posterPath;
         mPlotSynopsis = plotSynopsis;
