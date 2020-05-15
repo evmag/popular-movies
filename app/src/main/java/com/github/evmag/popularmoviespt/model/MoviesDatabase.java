@@ -33,7 +33,6 @@ public abstract class MoviesDatabase extends RoomDatabase {
                 moviesDatabase = Room.databaseBuilder(context.getApplicationContext(),
                         MoviesDatabase.class,
                         dbName)
-                        .allowMainThreadQueries() // TODO: Move database queries to a different thread and remove this
                         .build();
                 sMoviesDBs.put(dbName, moviesDatabase);
             }

@@ -18,8 +18,8 @@ import android.widget.TextView;
 
 import com.github.evmag.popularmoviespt.adapters.MovieGridAdapter;
 import com.github.evmag.popularmoviespt.model.Movie;
-import com.github.evmag.popularmoviespt.model.MovieDataSource;
 import com.github.evmag.popularmoviespt.model.MoviesDatabase;
+import com.github.evmag.popularmoviespt.utilities.DiskIOExecutor;
 import com.github.evmag.popularmoviespt.utilities.MovieDataJsonParser;
 import com.github.evmag.popularmoviespt.utilities.NetworkUtils;
 import com.github.evmag.popularmoviespt.viewmodels.MainViewModel;
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
         mMovieGrid.setLayoutManager(layoutManager);
         mMovieGrid.setAdapter(mMovieGridAdapter);
 
-        setupViewModel(MoviesDatabase.TOP_RATED_MOVIES_DB_NAME);
+        setupViewModel();
         loadOnlineData();
     }
 
@@ -100,18 +100,18 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
             case R.id.action_sort_by_rating:
                 mMainViewModel.setMainActivityState(MainViewModel.MainActivityState.TOP_RATED);
                 mSortByPopularity = false;
-                setupViewModel(MoviesDatabase.TOP_RATED_MOVIES_DB_NAME);
+                setupViewModel();
                 loadOnlineData();
                 return true;
             case R.id.action_sort_by_popularity:
                 mMainViewModel.setMainActivityState(MainViewModel.MainActivityState.MOST_POPULAR);
                 mSortByPopularity = true;
-                setupViewModel(MoviesDatabase.POPULAR_MOVIES_DB_NAME);
+                setupViewModel();
                 loadOnlineData();
                 return true;
             case R.id.action_favorite_movies:
                 mMainViewModel.setMainActivityState(MainViewModel.MainActivityState.FAVORITES);
-                setupViewModel(MoviesDatabase.FAVORITE_MOVIES_DB_NAME);
+                setupViewModel();
                 return true;
             case R.id.action_refresh:
                 loadOnlineData();
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
 
     }
 
-    private void setupViewModel(String databaseName) {
+    private void setupViewModel() {
         // Initialize view model
         if (mMainViewModel == null) {
             mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
@@ -199,17 +199,21 @@ public class MainActivity extends AppCompatActivity implements MovieGridAdapter.
             if (s == null) {
                 displayErrorNetwork();
             } else {
-                List<Movie> movies = MovieDataJsonParser.parseMovieDataJson(s);
+                final List<Movie> movies = MovieDataJsonParser.parseMovieDataJson(s);
                 if (movies == null) {
                     displayErrorNetwork();
                 } else {
-                    MovieDataSource.getInstance().setMovies(movies); // TODO: Remove
 
-                    // TODO: move this to another thread
-                    MoviesDatabase moviesDatabase =
+                    final MoviesDatabase moviesDatabase =
                             MoviesDatabase.getInstance(MainActivity.this, getDatabaseName());
-                    moviesDatabase.moviesDao().deleteAllMovies();
-                    moviesDatabase.moviesDao().insertAllMovies(movies);
+                    DiskIOExecutor.getInstance().getDiskIOExecutor().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            moviesDatabase.moviesDao().deleteAllMovies();
+                            moviesDatabase.moviesDao().insertAllMovies(movies);
+                        }
+                    });
+
                 }
             }
         }

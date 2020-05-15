@@ -21,6 +21,7 @@ import com.github.evmag.popularmoviespt.adapters.TrailersAdapter;
 import com.github.evmag.popularmoviespt.model.Movie;
 import com.github.evmag.popularmoviespt.model.MoviesDao;
 import com.github.evmag.popularmoviespt.model.MoviesDatabase;
+import com.github.evmag.popularmoviespt.utilities.DiskIOExecutor;
 import com.github.evmag.popularmoviespt.utilities.MovieDataJsonParser;
 import com.github.evmag.popularmoviespt.utilities.NetworkUtils;
 import com.github.evmag.popularmoviespt.viewmodels.DetailViewModel;
@@ -109,17 +110,31 @@ public class MovieDetail extends AppCompatActivity implements TrailersAdapter.Tr
     }
 
     public void toggleFavorite(View view) {
-        MoviesDao favoritesDao = MoviesDatabase.getInstance(this, MoviesDatabase.FAVORITE_MOVIES_DB_NAME).moviesDao();
-        Movie movie = mDetailViewModel.getMovie().getValue();
-        if (movie == null) {
+        final MoviesDao favoritesDao = MoviesDatabase.getInstance(this, MoviesDatabase.FAVORITE_MOVIES_DB_NAME).moviesDao();
+        final Movie movie;
+        if (mDetailViewModel.getMovie().getValue() == null) {
             movie = mDetailViewModel.getBackupFavoriteMovie();
+        } else {
+            movie = mDetailViewModel.getMovie().getValue();
         }
         if (mDetailViewModel.isMovieFavorite()) {
             mDetailViewModel.setBackupFavoriteMovie(movie);
-            favoritesDao.deleteMovie(movie);
+            DiskIOExecutor.getInstance().getDiskIOExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    favoritesDao.deleteMovie(movie);
+                }
+            });
+
             mDetailViewModel.setMovieFavorite(false);
         } else {
-            favoritesDao.insertMovie(movie);
+            DiskIOExecutor.getInstance().getDiskIOExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    favoritesDao.insertMovie(movie);
+                }
+            });
+
             mDetailViewModel.setMovieFavorite(true);
         }
         setupFavoriteButton();
@@ -203,7 +218,7 @@ public class MovieDetail extends AppCompatActivity implements TrailersAdapter.Tr
                 if (trailers == null && reviews == null) {
 //                    displayErrorNetwork();
                 } else {
-                    Movie movie = mDetailViewModel.getMovie().getValue();
+                    final Movie movie = mDetailViewModel.getMovie().getValue();
 
                     movie.setTrailerKeys(trailers.get(0));
                     movie.setTrailerNames(trailers.get(1));
@@ -211,10 +226,15 @@ public class MovieDetail extends AppCompatActivity implements TrailersAdapter.Tr
                     movie.setReviewAuthors(reviews.get(0));
                     movie.setReviewContents(reviews.get(1));
 
-                    // TODO: move this to another thread
-                    MoviesDatabase moviesDatabase =
+                    final MoviesDatabase moviesDatabase =
                             MoviesDatabase.getInstance(MovieDetail.this, mDetailViewModel.getSourceDatabaseName());
-                    moviesDatabase.moviesDao().updateMovie(movie);
+                    DiskIOExecutor.getInstance().getDiskIOExecutor().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            moviesDatabase.moviesDao().updateMovie(movie);
+                        }
+                    });
+
                 }
             }
         }
