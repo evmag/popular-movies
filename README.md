@@ -3,7 +3,6 @@ Popular Movies project for Android Developer Nanodegree Program from Udacity. Th
 
 ## Screenshots
 |![Main activity](screenshots/main_activity.png)|![Main activity with menu](screenshots/main_activity_with_menu.png)|
-|:-:|:-:|:-:|
 |![Detail activity 1](screenshots/detail_activity_1.png)|![Detail activity 2](screenshots/detail_activity_2.png)|
 ![Main activity rotated](screenshots/main_activity_rotated.png)
 
@@ -40,3 +39,10 @@ You’ll add more information to your movie details view:
 - You’ll allow users to read reviews of a selected movie.
 - You’ll also allow users to mark a movie as a favorite in the details view by tapping a button(star). This is for a local movies collection that you will maintain and does not require an API request*.
 - You’ll modify the existing sorting criteria for the main view to include an additional pivot to show their favorites collection.
+
+## API key
+The project requires a TMDb API key. The key is defined in "local.properties" file as:
+
+```
+tmdb.api.key.value="Your TMDb key"
+```
