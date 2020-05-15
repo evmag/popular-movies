@@ -1,4 +1,4 @@
-package com.github.evmag.popularmoviespt;
+package com.github.evmag.popularmoviespt.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.evmag.popularmoviespt.R;
 import com.github.evmag.popularmoviespt.model.Movie;
-import com.github.evmag.popularmoviespt.model.MovieDataSource;
-import com.github.evmag.popularmoviespt.model.MoviesDao;
-import com.github.evmag.popularmoviespt.model.MoviesDatabase;
 import com.github.evmag.popularmoviespt.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
@@ -82,10 +80,10 @@ public class MovieGridAdapter extends RecyclerView.Adapter<MovieGridAdapter.MyVi
         ImageView mThumbnail;
         TextView mTextView;
 
-        public MyViewHolder(@NonNull View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            mThumbnail = (ImageView) itemView.findViewById(R.id.iv_movie_thumbnail);
-            mTextView = (TextView) itemView.findViewById(R.id.tv_title);
+            mThumbnail = itemView.findViewById(R.id.iv_movie_thumbnail);
+            mTextView = itemView.findViewById(R.id.tv_title);
             itemView.setOnClickListener(this);
         }
 

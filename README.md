@@ -2,8 +2,9 @@
 Popular Movies project for Android Developer Nanodegree Program from Udacity. The project is build in two stages. Movies data fetched using [TMDb](href="https://www.themoviedb.org/") API
 
 ## Screenshots
-![Main activity](screenshots/main_activity.png)![Main activity with menu](screenshots/main_activity_with_menu.png)
-![Detail activity 1](screenshots/detail_activity_1.png)![Detail activity 2](screenshots/detail_activity_2.png)
+|![Main activity](screenshots/main_activity.png)|![Main activity with menu](screenshots/main_activity_with_menu.png)|
+|:-:|:-:|:-:|
+|![Detail activity 1](screenshots/detail_activity_1.png)|![Detail activity 2](screenshots/detail_activity_2.png)|
 ![Main activity rotated](screenshots/main_activity_rotated.png)
 
 ## Libraries used
@@ -17,7 +18,7 @@ Popular Movies project for Android Developer Nanodegree Program from Udacity. Th
 
 ## Stage 1 - Main Discovery Screen, A Details View, and Settings
 
-Project requirments:
+Project requirements:
 
 In this stage you’ll build the core experience of your movies app. Your app will:
 - Upon launch, present the user with an grid arrangement of movie posters.

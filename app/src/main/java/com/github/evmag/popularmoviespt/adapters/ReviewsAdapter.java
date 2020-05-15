@@ -45,12 +45,12 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
         notifyDataSetChanged();
     }
 
-    class ReviewsViewHolder extends RecyclerView.ViewHolder {
+    static class ReviewsViewHolder extends RecyclerView.ViewHolder {
         TextView mAuthor;
         TextView mContent;
         View mDivider;
 
-        public ReviewsViewHolder(@NonNull View itemView) {
+        ReviewsViewHolder(@NonNull View itemView) {
             super(itemView);
             mAuthor = itemView.findViewById(R.id.tv_author);
             mContent = itemView.findViewById(R.id.tv_content);

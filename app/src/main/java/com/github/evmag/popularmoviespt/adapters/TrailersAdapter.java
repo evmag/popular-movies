@@ -56,7 +56,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         TextView mTrailerName;
         View mDivider;
 
-        public TrailersViewHolder(@NonNull View itemView) {
+        TrailersViewHolder(@NonNull View itemView) {
             super(itemView);
             mTrailerName = itemView.findViewById(R.id.tv_trailer);
             mDivider = itemView.findViewById(R.id.divider_trailer_item);

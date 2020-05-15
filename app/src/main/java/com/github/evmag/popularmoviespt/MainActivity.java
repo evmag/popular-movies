@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.evmag.popularmoviespt.adapters.MovieGridAdapter;
 import com.github.evmag.popularmoviespt.model.Movie;
 import com.github.evmag.popularmoviespt.model.MovieDataSource;
 import com.github.evmag.popularmoviespt.model.MoviesDatabase;
